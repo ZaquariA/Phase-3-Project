@@ -10,6 +10,8 @@
 
 For this project, we'll be working with an Order domain that with take the id's of the Pizza class and Customer class.
 
+Pizza Parlor is an app that allows you to be able to place an order 
+
 # We have three models:
 
 - Order
@@ -28,7 +30,7 @@ Create - The user will be able to make an order by selecting types of pizzas and
 
 Read - The user will be able to use CLI to interact and follow a guide to their order.
 
-Update - 
+Update - The user will be able to update the pizza order. 
 
 Delete - The user will be able to delete their user if wanted, and will be able to remove pizzas from their order.
 
