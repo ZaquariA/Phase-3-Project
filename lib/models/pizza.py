@@ -1,23 +1,13 @@
 
-
+# objects/pizza.py
 class Pizza:
+    def __init__(self, pizza_type):
+        self.pizza_type = pizza_type
+        self.toppings = []
 
-    all = []
+    def add_toppings(self, toppings):
+        self.toppings.extend(toppings)
 
-    def __init__(self, name):
-
-        self.name = name
-        Pizza.all.append(self)
-
-    @property
-
-    def name(self):
-        return self._name
-    
-    @name.setter
-    
-    def name(self, name):
-        if isinstance(name, str) and not hasattr(self, 'name'):
-            self._name = name
-        else:
-            raise Exception('Name must be of type str / name can not be changed.')
+    def __str__(self):
+        toppings_str = ', '.join(self.toppings)
+        return f"{self.pizza_type} Pizza with toppings: {toppings_str}"
