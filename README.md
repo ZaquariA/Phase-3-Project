@@ -8,9 +8,7 @@
 
 # One sentence description:
 
-For this project, we'll be working with an Order domain that with take the id's of the Pizza class and Customer class.
-
-Pizza Parlor is an app that allows you to be able to place an order 
+Pizza Parlor is a user-friendly application that enables customers to easily customize and order their favorite pizzas with a variety of delicious toppings.
 
 # We have three models:
 
