@@ -143,7 +143,7 @@ class Pizza:
         CONN.commit()
         print("Pizza created successfully.")
 
-Pizza.create_table_pizza()
+
 
 # Prompt the user to create a pizza before placing an order
 
@@ -175,19 +175,22 @@ class Order:
     @classmethod
     def place_order(cls, customer_id, pizza_id, quantity):
         pizza = cls.get_pizza_by_id(pizza_id)
-        total_price = float(pizza.price) * quantity
-        sql = '''
-            INSERT INTO orders (customer_id, pizza_id, quantity, total_price)
-            VALUES (?, ?, ?, ?)
-        '''
-        CURSOR.execute(sql, (customer_id, pizza_id, quantity, total_price))
-        CONN.commit()
-        print("Order placed successfully.")
+        if pizza:
+            total_price = pizza.price * quantity
+            sql = '''
+                INSERT INTO orders (customer_id, pizza_id, quantity, total_price)
+                VALUES (?, ?, ?, ?)
+            '''
+            CURSOR.execute(sql, (customer_id, pizza_id, quantity, total_price))
+            CONN.commit()
+            print("Order placed successfully.")
+        else:
+            print(f"Pizza with ID {pizza_id} not found.")
 
     @classmethod
     def view_orders_by_customer(cls, customer_id):
         sql = '''
-            SELECT orders.id, pizzas.name, pizzas.size, pizzas.crust, pizzas.toppings, pizzas.price, orders.quantity, orders.total_price
+            SELECT orders.id, pizzas.name, orders.quantity, pizzas.price * orders.quantity AS total_price
             FROM orders
             INNER JOIN pizzas ON orders.pizza_id = pizzas.id
             WHERE orders.customer_id = ?
@@ -196,7 +199,7 @@ class Order:
         orders = CURSOR.fetchall()
         if orders:
             for order in orders:
-                print(f"Order ID: {order[0]}, Pizza: {order[1]} ({order[2]}, {order[3]}, {order[4]}), Price: {order[5]}, Quantity: {order[6]}, Total Price: {order[7]}")
+                print(f"Order ID: {order[0]}, Pizza: {order[1]}, Quantity: {order[2]}, Total Price: {order[3]}")
         else:
             print("No orders found for this customer.")
 
@@ -293,7 +296,7 @@ def place_order_menu():
     print("++++++++++++++++++++++++++++++++++++++++++++")
     customer_id = input("Enter your customer ID: ")
     pizza_id = input("Enter the pizza ID you want to order: ")
-    quantity = input("Enter the quantity: ")
+    quantity = int(input("Enter the quantity: "))
     Order.place_order(customer_id, pizza_id, quantity)
     input("Press Enter to go back to the main menu.")
 
