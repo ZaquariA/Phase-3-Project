@@ -1,0 +1,14 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+# Add any external packages you need for your project
+# For example, if you use Flask for a web application
+flask = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
