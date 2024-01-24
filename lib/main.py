@@ -1,3 +1,4 @@
+import ipdb
 import os
 import sqlite3
 
@@ -51,6 +52,7 @@ class Customer:
         CONN.commit()
         print("Customer created successfully.")
 
+
     @classmethod
     def update_customer(cls):
         customer_id = input("Enter the customer ID to update: ")
@@ -84,6 +86,9 @@ class Customer:
             print("Customer updated successfully.")
         else:
             print("Customer not found.")
+
+Customer.create_customer()
+
 
 class Pizza:
     def __init__(self, name, size, crust, toppings, price, pizza_id=None):
@@ -170,7 +175,7 @@ class Order:
     @classmethod
     def place_order(cls, customer_id, pizza_id, quantity):
         pizza = cls.get_pizza_by_id(pizza_id)
-        total_price = pizza.price * quantity
+        total_price = float(pizza.price) * quantity
         sql = '''
             INSERT INTO orders (customer_id, pizza_id, quantity, total_price)
             VALUES (?, ?, ?, ?)
@@ -207,6 +212,7 @@ class Order:
             return Pizza(*pizza)
         else:
             return None
+    
 
 def menu():
     while True:
