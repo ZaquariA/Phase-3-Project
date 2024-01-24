@@ -37,6 +37,54 @@ class Customer:
         else:
             print("No customers found.")
 
+    @classmethod
+    def create_customer(cls):
+        name = input("Enter the customer name: ")
+        address = input("Enter the customer address: ")
+        phone = input("Enter the customer phone number: ")
+
+        sql = '''
+            INSERT INTO customers (name, address, phone)
+            VALUES (?, ?, ?)
+        '''
+        CURSOR.execute(sql, (name, address, phone))
+        CONN.commit()
+        print("Customer created successfully.")
+
+    @classmethod
+    def update_customer(cls):
+        customer_id = input("Enter the customer ID to update: ")
+        name = input("Enter the updated name (leave empty to keep current value): ")
+        address = input("Enter the updated address (leave empty to keep current value): ")
+        phone = input("Enter the updated phone number (leave empty to keep current value): ")
+
+        # Construct the SQL query
+        sql = 'UPDATE customers SET'
+        values = []
+
+        if name:
+            sql += ' name = ?,'
+            values.append(name)
+        if address:
+            sql += ' address = ?,'
+            values.append(address)
+        if phone:
+            sql += ' phone = ?,'
+            values.append(phone)
+
+        # Remove the trailing comma from the SQL query
+        sql = sql.rstrip(',')
+        sql += ' WHERE id = ?'
+        values.append(customer_id)
+
+        CURSOR.execute(sql, tuple(values))
+        CONN.commit()
+
+        if CURSOR.rowcount > 0:
+            print("Customer updated successfully.")
+        else:
+            print("Customer not found.")
+
 class Pizza:
     def __init__(self, name, size, crust, toppings, price, pizza_id=None):
         self.name = name
@@ -73,6 +121,27 @@ class Pizza:
                 print(f"ID: {pizza[0]}, Name: {pizza[1]}, Size: {pizza[2]}, Crust: {pizza[3]}, Toppings: {pizza[4]}, Price: {pizza[5]}")
         else:
             print("No pizzas found.")
+
+    @classmethod
+    def create_pizza(cls):
+        name = input("Enter the pizza name: ")
+        size = input("Enter the pizza size: ")
+        crust = input("Enter the pizza crust: ")
+        toppings = input("Enter the pizza toppings: ")
+        price = float(input("Enter the pizza price: "))
+
+        sql = '''
+            INSERT INTO pizzas (name, size, crust, toppings, price)
+            VALUES (?, ?, ?, ?, ?)
+        '''
+        CURSOR.execute(sql, (name, size, crust, toppings, price))
+        CONN.commit()
+        print("Pizza created successfully.")
+
+Pizza.create_table_pizza()
+
+# Prompt the user to create a pizza before placing an order
+
 
 class Order:
     def __init__(self, customer_id, pizza_id, quantity, total_price, order_id=None):
@@ -144,7 +213,7 @@ def menu():
         os.system('cls||clear')
         print("+++++++++++++++++++++++++++++++++++++++")
         print("++                                   ++")
-        print("++            Pizza Shop              ++")
+        print("++            Pizza Parlor           ++")
         print("++                                   ++")
         print("+++++++++++++++++++++++++++++++++++++++")
         print("++                                   ++")
@@ -165,31 +234,54 @@ def menu():
             print("Invalid input! Please select a valid option.")
             input("Press Enter to continue.")
 
+Pizza.create_table_pizza()
+
 def view_pizzas_menu():
     os.system('cls||clear')
     print("++++++++++++++++++++++++++++++++++++++++++++")
     print("++                                        ++")
-    print("++             View Pizzas                 ++")
+    print("++             View Pizzas                ++")
     print("++                                        ++")
     print("++++++++++++++++++++++++++++++++++++++++++++")
     Pizza.view_all_pizzas()
+    choice = input("Do you want to create a pizza (Y/N)? ")
+    choice = choice.lower()
+
+    if choice == "y":
+        Pizza.create_pizza()    
     input("Press Enter to go back to the main menu.")
+
+Customer.create_table_customer()
 
 def view_customers_menu():
     os.system('cls||clear')
     print("++++++++++++++++++++++++++++++++++++++++++++")
     print("++                                        ++")
-    print("++            View Customers               ++")
+    print("++            View Customers              ++")
     print("++                                        ++")
     print("++++++++++++++++++++++++++++++++++++++++++++")
     Customer.view_all_customers()
+
+    # Prompt the user to create or update a customer
+    choice = input("Do you want to create a customer (C) or update a customer (U)? ")
+    choice = choice.lower()
+
+    if choice == "c":
+        Customer.create_customer()
+    elif choice == "u":
+        Customer.update_customer()
+    else:
+        print("Invalid choice.")
+
     input("Press Enter to go back to the main menu.")
+
+Order.create_table_order()
 
 def place_order_menu():
     os.system('cls||clear')
     print("++++++++++++++++++++++++++++++++++++++++++++")
     print("++                                        ++")
-    print("++             Place Order                 ++")
+    print("++             Place Order                ++")
     print("++                                        ++")
     print("++++++++++++++++++++++++++++++++++++++++++++")
     customer_id = input("Enter your customer ID: ")
@@ -202,7 +294,7 @@ def view_orders_menu():
     os.system('cls||clear')
     print("++++++++++++++++++++++++++++++++++++++++++++")
     print("++                                        ++")
-    print("++             View Orders                 ++")
+    print("++             View Orders                ++")
     print("++                                        ++")
     print("++++++++++++++++++++++++++++++++++++++++++++")
     customer_id = input("Enter your customer ID: ")
@@ -212,5 +304,14 @@ def view_orders_menu():
 while True:
     menu_choice = menu()
     if menu_choice == "1":
-        
-    
+        view_pizzas_menu()
+    elif menu_choice == "2":
+        view_customers_menu()
+    elif menu_choice == "3":
+        place_order_menu()
+    elif menu_choice == "4":
+        view_orders_menu()
+    elif menu_choice == "0":
+        break
+
+menu()
