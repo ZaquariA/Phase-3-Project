@@ -2,6 +2,8 @@ from models.customers import Customer
 from models.orders import Order
 from models.pizza import Pizza
 
+
+
 # Constants for pricing
 PIZZA_BASE_PRICE = 20
 TOPPING_PRICE = 0.75
@@ -15,8 +17,8 @@ def calculate_order_total(order):
     return total_price
 
 def main():
-    print("Welcome to the Pizza Order System!")
-
+    print("Welcome to the Pizza Parlor System!")
+    
     # Gather customer information
     customer_name = input("Enter your name: ")
     customer = Customer(customer_name)
@@ -49,7 +51,6 @@ def main():
     total_price = calculate_order_total(order)
     print(f"\nTotal Price: ${total_price:.2f}")
 
-    # Handle payment (you can add payment-related logic here)
 
 if __name__ == "__main__":
     main()
