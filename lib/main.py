@@ -87,7 +87,7 @@ class Customer:
         else:
             print("Customer not found.")
 
-Customer.create_customer()
+# Customer.create_customer()
 
 
 class Pizza:
@@ -224,16 +224,17 @@ def menu():
         print("+++++++++++++++++++++++++++++++++++++++")
         print("++                                   ++")
         print("++       1. View Pizzas              ++")
-        print("++       2. View Customers           ++")
-        print("++       3. Place Order              ++")
-        print("++       4. View Orders              ++")
+        print("++       2. Add New Customer         ++")
+        print("++       3. View Customers           ++")
+        print("++       4. Place Order              ++")
+        print("++       5. View Orders              ++")
         print("++       0. Exit                     ++")
         print("++                                   ++")
         print("+++++++++++++++++++++++++++++++++++++++")
         
-        choice = input("Enter your choice (1-4, or 0 to exit): ")
+        choice = input("Enter your choice (1-5, or 0 to exit): ")
         
-        if choice in ("0", "1", "2", "3", "4"):
+        if choice in ("0", "1", "2", "3", "4", "5"):
             return choice
         else:
             os.system('cls||clear')
@@ -312,10 +313,12 @@ while True:
     if menu_choice == "1":
         view_pizzas_menu()
     elif menu_choice == "2":
-        view_customers_menu()
+        Customer.create_customer()
     elif menu_choice == "3":
-        place_order_menu()
+        view_customers_menu()
     elif menu_choice == "4":
+        place_order_menu()
+    elif menu_choice == "5":
         view_orders_menu()
     elif menu_choice == "0":
         break
