@@ -219,17 +219,18 @@ class Pizza:
     @classmethod
     def get_most_ordered_pizza(cls):
         sql = '''
-            SELECT pizzas.name, COUNT(orders.pizza_id) AS order_count
-            FROM pizzas            INNER JOIN orders ON pizzas.id = orders.pizza_id
+            SELECT pizzas.name, SUM(orders.quantity) AS total_quantity
+            FROM pizzas
+            INNER JOIN orders ON pizzas.id = orders.pizza_id
             GROUP BY pizzas.name
-            ORDER BY order_count DESC
+            ORDER BY total_quantity DESC
             LIMIT 1
         '''
         CURSOR.execute(sql)
         most_ordered_pizza = CURSOR.fetchone()
         if most_ordered_pizza:
-            pizza_name, order_count = most_ordered_pizza
-            print(f"Fan favorite: {pizza_name}, with {order_count} sold!")
+            pizza_name, total_quantity = most_ordered_pizza
+            print(f"Fan favorite: {pizza_name}, ordered {total_quantity} times!")
         else:
             print("No pizzas found.")
 
