@@ -450,6 +450,7 @@ def view_orders_menu():
     print("| |           Checkout Orders              | |")
     print("|\|                                        |/|")
     print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+    Customer.view_all_customers()
     customer_id = input("Enter your customer ID: ")
     Order.view_orders_by_customer(customer_id)
     choice = input("To remove order, enter order ID#:")
