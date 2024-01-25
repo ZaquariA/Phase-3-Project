@@ -1,47 +1,88 @@
 # Phase-3-Project
 
+
 # Contributors:
 
-- Melissa Velasquez
 
-- Zaquari Andl
+-
+ Melissa Velasquez
 
-# One sentence description:
 
-Pizza Parlor is a user-friendly application that enables customers to easily customize and order their favorite pizzas with a variety of delicious toppings.
+-
+ Zaquari Andl
 
-# We have three models:
 
-- Order
 
-- Pizza
 
-- Customers
+# Pizza Parlor CLI
 
-# ERD
 
-- https://dbdiagram.io/d/65ad4da9ac844320ae61aec7
+This project is a command-line interface (CLI) application for managing a pizza restaurant. It
+ allows users to view available pizzas, add new customers, view existing customers, place orders, and view order history.
 
-## MVP CRUD
 
-Create - The user will be able to make an order by selecting types of pizzas and seeing a total price.
+## Project Overview
 
-Read - The user will be able to use CLI to interact and follow a guide to their order.
 
-Update - The user will be able to update the pizza order. 
+The Pizza Parlor CLI application offers the following functionalities:
 
-Delete - The user will be able to delete their user if wanted, and will be able to remove pizzas from their order.
 
-# Property Method Plan
+-
+ View Pizzas: Display a list of available pizzas with details.
+-
+ Add New Customer: Add a new customer to the system.
+-
+ View Customers: Display a list of existing customers.
+-
+ Place Order: Place a new order by selecting a customer and choosing pizzas.
+-
+ View Orders: View order history and details.
 
-Order will take in: self, customer, pizza, and price
+## ERD
 
-Pizza will take in: self and name
+https://dbdiagram.io/d/65ad4da9ac844320ae61aec7
 
-Customer will take in: self and name
 
-The Order class will be the main class that gets and sets the Customer and Pizza classes.
+## Instructions for Running the Project      
 
-The name of the Pizza and Customer classes must be of type str and will raise an exception otherwise.
 
-The price for the Order must be of type float and will raise an exception if otherwise.
+
+
+To run the project, follow these steps:
+
+
+1.
+ Make sure you have Python installed on your machine.
+
+
+2.
+ Open a terminal or command prompt.
+
+
+3.
+ Navigate to the directory where the project files are located.
+
+
+4.
+ Install the required dependencies by running the following command:
+
+
+  ```bash
+ 
+pip install -r requirements.txt
+
+
+ 
+ 
+##Instructions
+for Using the Project
+Once the CLI application is running, you can use the following commands to interact with the project:
+
+
+View Pizzas (1): Display a list of available pizzas with details.
+Add New Customer (2): Add a new customer to the system.
+View Customers (3): Display a list of existing customers.
+Place Order (4): Place a new order by selecting a customer and choosing pizzas.
+View Orders (5): View order history and details.
+Exit (0): Exit the Pizza Parlor CLI.
+
