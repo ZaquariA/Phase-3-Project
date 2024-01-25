@@ -163,6 +163,48 @@ class Pizza:
         CONN.commit()
         print("Pizza deleted successfully.")
 
+    @classmethod
+    def update_pizza(cls):
+        pizza_id = input("Enter the pizza ID to update: ")
+        name = input("Enter the updated name (leave empty to keep current value): ")
+        size = input("Enter the updated size (leave empty to keep current value): ")
+        crust = input("Enter the updated crust (leave empty to keep current value): ")
+        toppings = input("Enter the updated toppings (leave empty to keep current value): ")
+        price = input("Enter the updated price (leave empty to keep current value): ")
+
+        # Construct the SQL query
+        sql = 'UPDATE pizzas SET'
+        values = []
+
+        if name:
+            sql += ' name = ?,'
+            values.append(name)
+        if size:
+            sql += ' size = ?,'
+            values.append(size)
+        if crust:
+            sql += ' crust = ?,'
+            values.append(crust)
+        if toppings:
+            sql += ' toppings = ?,'
+            values.append(toppings)
+        if price:
+            sql += ' price = ?,'
+            values.append(price)
+
+        # Remove the trailing comma from the SQL query
+        sql = sql.rstrip(',')
+        sql += ' WHERE id = ?'
+        values.append(pizza_id)
+
+        CURSOR.execute(sql, tuple(values))
+        CONN.commit()
+
+        if CURSOR.rowcount > 0:
+            print("Pizza updated successfully.")
+        else:
+            print("Pizza not found.")
+
 
 
 
@@ -288,13 +330,16 @@ def view_pizzas_menu():
         print("|\|                                        |/|")
         print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
         Pizza.view_all_pizzas()
-        choice = input("Do you want to create a pizza (Y/N) or enter the ID of the pizza you want to delete: ")
+        choice = input("Do you want to create a pizza (Y/N), update a pizza(u), or delete a pizza?(id#) ")
+        choice = choice.lower()
 
-        if choice.lower() == "y":
+        if choice == "y":
             Pizza.create_pizza()
+        elif choice == "u":
+            Pizza.update_pizza()
         elif choice.isdigit():
             Pizza.delete_pizza(choice)
-        elif choice.lower() == "n":
+        elif choice == "n":
             break
         else:
             print("Invalid choice. Please select a valid option.")
@@ -341,6 +386,20 @@ def place_order_menu():
     print("| |           Call in an Order             | |")
     print("|\|                                        |/|")
     print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+    print("______________________________________________")
+    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+    print("|/|                                        |\|")
+    print("| |                Pizzas                  | |")
+    print("|\|                                        |/|")
+    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+    Pizza.view_all_pizzas()
+    print("______________________________________________")
+    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+    print("|/|                                        |\|")
+    print("| |                Customers               | |")
+    print("|\|                                        |/|")
+    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+    Customer.view_all_customers()
     customer_id = input("Enter your customer ID: ")
     pizza_id = input("Enter the pizza ID you want to order: ")
     quantity = int(input("Enter the quantity: "))
@@ -378,5 +437,3 @@ while True:
         view_orders_menu()
     elif menu_choice == "0":
         break
-
-menu()
