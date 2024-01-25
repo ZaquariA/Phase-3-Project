@@ -86,6 +86,16 @@ class Customer:
             print("Customer updated successfully.")
         else:
             print("Customer not found.")
+            
+    @classmethod
+    def delete_customer(cls, customer_id):
+        sql = '''
+            DELETE FROM customers
+            WHERE id = ?
+        '''
+        CURSOR.execute(sql, (customer_id,))
+        CONN.commit()
+        print("Customer deleted successfully.")
 
 # Customer.create_customer()
 
@@ -142,6 +152,17 @@ class Pizza:
         CURSOR.execute(sql, (name, size, crust, toppings, price))
         CONN.commit()
         print("Pizza created successfully.")
+
+    @classmethod
+    def delete_pizza(cls, pizza_id):
+        sql = '''
+            DELETE FROM pizzas
+            WHERE id = ?
+        '''
+        CURSOR.execute(sql, (pizza_id,))
+        CONN.commit()
+        print("Pizza deleted successfully.")
+
 
 
 
@@ -215,16 +236,27 @@ class Order:
             return Pizza(*pizza)
         else:
             return None
+        
+    @classmethod
+    def delete_order(cls, order_id):
+        sql = '''
+            DELETE FROM orders
+            WHERE id = ?
+        '''
+        CURSOR.execute(sql, (order_id,))
+        CONN.commit()
+        print("Order deleted successfully.")
     
 
 def menu():
     while True:
         os.system('cls||clear')
-        print("|\|+++++++++++++++++++++++++++++++++++|/|")
+        print("_________________________________________")
+        print("|\|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|/|")
         print("| |                                   | |")
         print("|/|            Pizza Parlor           |\|")
         print("| |                                   | |")
-        print("|\|+++++++++++++++++++++++++++++++++++|/|")
+        print("|\|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|/|")
         print("| |                                   | |")
         print("|/|       1. View Pizzas              |\|")
         print("| |       2. Add New Customer         | |")
@@ -233,7 +265,7 @@ def menu():
         print("|/|       5. View Orders              |\|")
         print("| |       0. Exit                     | |")
         print("|\|                                   |/|")
-        print("| |+++++++++++++++++++++++++++++++++++| |")
+        print("| |                                   | |")
         
         choice = input("Enter your choice (1-5, or 0 to exit): ")
         
@@ -247,15 +279,26 @@ def menu():
 Pizza.create_table_pizza()
 
 def view_pizzas_menu():
-    os.system('cls||clear')
-    print("++++++++++++++++++++++++++++++++++++++++++++")
-    print("++                                        ++")
-    print("++             View Pizzas                ++")
-    print("++                                        ++")
-    print("++++++++++++++++++++++++++++++++++++++++++++")
-    Pizza.view_all_pizzas()
-    choice = input("Do you want to create a pizza (Y/N)? ")
-    choice = choice.lower()
+    while True:
+        os.system('cls||clear')
+        print("______________________________________________")
+        print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+        print("|/|                                        |\|")
+        print("| |             Hand Tossed Pizzas         | |")
+        print("|\|                                        |/|")
+        print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+        Pizza.view_all_pizzas()
+        choice = input("Do you want to create a pizza (Y/N) or enter the ID of the pizza you want to delete: ")
+
+        if choice.lower() == "y":
+            Pizza.create_pizza()
+        elif choice.isdigit():
+            Pizza.delete_pizza(choice)
+        elif choice.lower() == "n":
+            break
+        else:
+            print("Invalid choice. Please select a valid option.")
+        input("Press Enter to continue.")
 
     if choice == "y":
         Pizza.create_pizza()    
@@ -265,21 +308,24 @@ Customer.create_table_customer()
 
 def view_customers_menu():
     os.system('cls||clear')
-    print("++++++++++++++++++++++++++++++++++++++++++++")
-    print("++                                        ++")
-    print("++            View Customers              ++")
-    print("++                                        ++")
-    print("++++++++++++++++++++++++++++++++++++++++++++")
+    print("______________________________________________")
+    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+    print("|/|                                        |\|")
+    print("| |          Our Valued Customers          | |")
+    print("|\|                                        |/|")
+    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
     Customer.view_all_customers()
 
     # Prompt the user to create or update a customer
-    choice = input("Do you want to create a customer (C) or update a customer (U)? ")
+    choice = input("Do you want to create a customer (C), update a customer (U), or delete a customer? (Id#) ")
     choice = choice.lower()
 
     if choice == "c":
         Customer.create_customer()
     elif choice == "u":
         Customer.update_customer()
+    elif choice.isdigit():
+        Customer.delete_customer(choice)
     else:
         print("Invalid choice.")
 
@@ -289,11 +335,12 @@ Order.create_table_order()
 
 def place_order_menu():
     os.system('cls||clear')
-    print("++++++++++++++++++++++++++++++++++++++++++++")
-    print("++                                        ++")
-    print("++             Place Order                ++")
-    print("++                                        ++")
-    print("++++++++++++++++++++++++++++++++++++++++++++")
+    print("______________________________________________")
+    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+    print("|/|                                        |\|")
+    print("| |           Call in an Order             | |")
+    print("|\|                                        |/|")
+    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
     customer_id = input("Enter your customer ID: ")
     pizza_id = input("Enter the pizza ID you want to order: ")
     quantity = int(input("Enter the quantity: "))
@@ -302,13 +349,19 @@ def place_order_menu():
 
 def view_orders_menu():
     os.system('cls||clear')
-    print("||xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx||")
-    print("||                                        ||")
-    print("||             View Orders                ||")
-    print("||                                        ||")
-    print("||xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx||")
+    print("______________________________________________")
+    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+    print("|/|                                        |\|")
+    print("| |           Checkout Orders              | |")
+    print("|\|                                        |/|")
+    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
     customer_id = input("Enter your customer ID: ")
     Order.view_orders_by_customer(customer_id)
+    choice = input("To remove order, enter order ID#:")
+    if choice.isdigit():
+        Order.delete_order(choice)
+    else:
+        print("Invalid choice.")
     input("Press Enter to go back to the main menu.")
 
 while True:
