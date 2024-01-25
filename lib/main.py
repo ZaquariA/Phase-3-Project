@@ -1,4 +1,3 @@
-import ipdb
 import os
 import sqlite3
 
@@ -392,32 +391,56 @@ def view_customers_menu():
 Order.create_table_order()
 
 def place_order_menu():
-    os.system('cls||clear')
-    print("______________________________________________")
-    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
-    print("|/|                                        |\|")
-    print("| |           Call in an Order             | |")
-    print("|\|                                        |/|")
-    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
-    print("______________________________________________")
-    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
-    print("|/|                                        |\|")
-    print("| |                Pizzas                  | |")
-    print("|\|                                        |/|")
-    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
-    Pizza.view_all_pizzas()
-    print("______________________________________________")
-    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
-    print("|/|                                        |\|")
-    print("| |                Customers               | |")
-    print("|\|                                        |/|")
-    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
-    Customer.view_all_customers()
-    customer_id = input("Enter your customer ID: ")
-    pizza_id = input("Enter the pizza ID you want to order: ")
-    quantity = int(input("Enter the quantity: "))
-    Order.place_order(customer_id, pizza_id, quantity)
-    input("Press Enter to go back to the main menu.")
+    while True:
+        os.system('cls||clear')
+        print("______________________________________________")
+        print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+        print("|/|                                        |\|")
+        print("| |           Call in an Order             | |")
+        print("|\|                                        |/|")
+        print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+        choice = input("Do you want to place an order? (Y/N) :")
+        choice = choice.lower()
+        if choice == "y":
+            os.system('cls||clear')
+            print("______________________________________________")
+            print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+            print("|/|                                        |\|")
+            print("| |                Customers               | |")
+            print("|\|                                        |/|")
+            print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+            Customer.view_all_customers()
+            customer_id = input("Enter your customer ID: ")
+            if customer_id == customer_id:
+                    os.system('cls||clear')
+                    print("______________________________________________")
+                    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+                    print("|/|                                        |\|")
+                    print("| |                Pizzas                  | |")
+                    print("|\|                                        |/|")
+                    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+                    Pizza.view_all_pizzas()
+                    pizza_id = input("Enter the pizza ID you want to order: ")
+                    if pizza_id == pizza_id:
+                        quantity = int(input("Enter the quantity: "))
+                        choice2 = input("Would you like to order another pizza? (Y/N)")
+                    else:
+                        print('Invalid choice.')
+            elif customer_id != int:
+                    print('Invalid choice.')
+            else:
+                    break
+        
+
+
+        elif choice == "n":
+            break
+        else:
+            print("Invalid choice.")
+        Order.place_order(customer_id, pizza_id, quantity)
+        input("Press Enter to go back to the main menu.")
+            
+
 
 def view_orders_menu():
     os.system('cls||clear')
