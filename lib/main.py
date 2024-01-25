@@ -96,6 +96,19 @@ class Customer:
         CONN.commit()
         print("Customer deleted successfully.")
 
+    @classmethod
+    def get_customer(cls, customer_input):
+        sql = '''
+            SELECT * FROM customers
+            WHERE id = ? OR name = ?
+        '''
+        CURSOR.execute(sql, (customer_input, customer_input))
+        customer = CURSOR.fetchone()
+        if customer:
+            return cls(*customer)
+        else:
+            return None
+
 # Customer.create_customer()
 
 
@@ -374,12 +387,10 @@ def view_customers_menu():
     Customer.view_all_customers()
 
     # Prompt the user to create or update a customer
-    choice = input("Do you want to create a customer (C), update a customer (U), or delete a customer? (Id#) ")
+    choice = input("Do you want to update a customer (U), or delete a customer? (Id#) ")
     choice = choice.lower()
 
-    if choice == "c":
-        Customer.create_customer()
-    elif choice == "u":
+    if choice == "u":
         Customer.update_customer()
     elif choice.isdigit():
         Customer.delete_customer(choice)
@@ -399,8 +410,9 @@ def place_order_menu():
         print("| |           Call in an Order             | |")
         print("|\|                                        |/|")
         print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
-        choice = input("Do you want to place an order? (Y/N) :")
+        choice = input("Do you want to place an order? (Y/N): ")
         choice = choice.lower()
+
         if choice == "y":
             os.system('cls||clear')
             print("______________________________________________")
@@ -410,35 +422,34 @@ def place_order_menu():
             print("|\|                                        |/|")
             print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
             Customer.view_all_customers()
-            customer_id = input("Enter your customer ID: ")
-            if customer_id == customer_id:
-                    os.system('cls||clear')
-                    print("______________________________________________")
-                    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
-                    print("|/|                                        |\|")
-                    print("| |                Pizzas                  | |")
-                    print("|\|                                        |/|")
-                    print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
-                    Pizza.view_all_pizzas()
-                    pizza_id = input("Enter the pizza ID you want to order: ")
-                    if pizza_id == pizza_id:
-                        quantity = int(input("Enter the quantity: "))
-                        choice2 = input("Would you like to order another pizza? (Y/N)")
-                    else:
-                        print('Invalid choice.')
-            elif customer_id != int:
-                    print('Invalid choice.')
+            customer_input = input("Enter the customer name or ID: ")
+            customer = Customer.get_customer(customer_input)
+
+            if customer:
+                customer_id = customer.customer_id
             else:
-                    break
-        
+                print("Customer not found.")
+                continue
 
-
+            os.system('cls||clear')
+            print("______________________________________________")
+            print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+            print("|/|                                        |\|")
+            print("| |                Pizzas                  | |")
+            print("|\|                                        |/|")
+            print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+            Pizza.view_all_pizzas()
+            pizza_id = input("Enter the pizza ID: ")
+            quantity = int(input("Enter the quantity: "))
         elif choice == "n":
             break
         else:
             print("Invalid choice.")
+            continue
+
         Order.place_order(customer_id, pizza_id, quantity)
         input("Press Enter to go back to the main menu.")
+
             
 
 
@@ -451,7 +462,14 @@ def view_orders_menu():
     print("|\|                                        |/|")
     print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
     Customer.view_all_customers()
-    customer_id = input("Enter your customer ID: ")
+    customer_input = input("Enter the customer name or ID: ")
+    customer = Customer.get_customer(customer_input)
+
+    if customer:
+            customer_id = customer.customer_id
+    else:
+        print("Customer not found.")
+    
     Order.view_orders_by_customer(customer_id)
     choice = input("To remove order, enter order ID#:")
     if choice.isdigit():
