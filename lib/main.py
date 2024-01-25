@@ -34,7 +34,7 @@ class Customer:
         customers = CURSOR.fetchall()
         if customers:
             for customer in customers:
-                print(f"ID: {customer[0]}, Name: {customer[1]}, Address: {customer[2]}, Phone: {customer[3]}")
+                print(f"ID: {customer[0]} || Name: {customer[1]} || Address: {customer[2]} || Phone: {customer[3]}")
         else:
             print("No customers found.")
 
@@ -60,7 +60,7 @@ class Customer:
         address = input("Enter the updated address (leave empty to keep current value): ")
         phone = input("Enter the updated phone number (leave empty to keep current value): ")
 
-        # Construct the SQL query
+
         sql = 'UPDATE customers SET'
         values = []
 
@@ -74,7 +74,7 @@ class Customer:
             sql += ' phone = ?,'
             values.append(phone)
 
-        # Remove the trailing comma from the SQL query
+
         sql = sql.rstrip(',')
         sql += ' WHERE id = ?'
         values.append(customer_id)
@@ -133,7 +133,7 @@ class Pizza:
         pizzas = CURSOR.fetchall()
         if pizzas:
             for pizza in pizzas:
-                print(f"ID: {pizza[0]}, Name: {pizza[1]}, Size: {pizza[2]}, Crust: {pizza[3]}, Toppings: {pizza[4]}, Price: {pizza[5]}")
+                print(f"ID: {pizza[0]} || Name: {pizza[1]} || Size: {pizza[2]} || Crust: {pizza[3]} || Toppings: ({pizza[4]}) || Price: {pizza[5]}")
         else:
             print("No pizzas found.")
 
@@ -172,7 +172,7 @@ class Pizza:
         toppings = input("Enter the updated toppings (leave empty to keep current value): ")
         price = input("Enter the updated price (leave empty to keep current value): ")
 
-        # Construct the SQL query
+
         sql = 'UPDATE pizzas SET'
         values = []
 
@@ -192,7 +192,6 @@ class Pizza:
             sql += ' price = ?,'
             values.append(price)
 
-        # Remove the trailing comma from the SQL query
         sql = sql.rstrip(',')
         sql += ' WHERE id = ?'
         values.append(pizza_id)
@@ -205,10 +204,23 @@ class Pizza:
         else:
             print("Pizza not found.")
 
+    @classmethod
+    def get_most_ordered_pizza(cls):
+        sql = '''
+            SELECT pizzas.name, COUNT(orders.pizza_id) AS order_count
+            FROM pizzas            INNER JOIN orders ON pizzas.id = orders.pizza_id
+            GROUP BY pizzas.name
+            ORDER BY order_count DESC
+            LIMIT 1
+        '''
+        CURSOR.execute(sql)
+        most_ordered_pizza = CURSOR.fetchone()
+        if most_ordered_pizza:
+            pizza_name, order_count = most_ordered_pizza
+            print(f"Fan favorite: {pizza_name}, with {order_count} sold!")
+        else:
+            print("No pizzas found.")
 
-
-
-# Prompt the user to create a pizza before placing an order
 
 
 class Order:
@@ -262,7 +274,7 @@ class Order:
         orders = CURSOR.fetchall()
         if orders:
             for order in orders:
-                print(f"Order ID: {order[0]}, Pizza: {order[1]}, Quantity: {order[2]}, Total Price: {order[3]}")
+                print(f"Order ID: {order[0]} || Pizza: {order[1]} || Quantity: {order[2]} || Total Price: {order[3]}")
         else:
             print("No orders found for this customer.")
 
@@ -329,6 +341,7 @@ def view_pizzas_menu():
         print("| |             Hand Tossed Pizzas         | |")
         print("|\|                                        |/|")
         print("| |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx| |")
+        Pizza.get_most_ordered_pizza()
         Pizza.view_all_pizzas()
         choice = input("Do you want to create a pizza (Y/N), update a pizza(u), or delete a pizza?(id#) ")
         choice = choice.lower()
